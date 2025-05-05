@@ -1,12 +1,14 @@
 PMW3610 driver implementation for ZMK with at least Zephyr 3.5
 
-This work is based on ufan's implementation of the driver.
+This work is based on [ufan's implementation](https://github.com/ufan/zmk/tree/support-trackpad) of the driver.
 
-Installation
+## Installation
+
 Only GitHub actions builds are covered here. Local builds are different for each user, therefore it's not possible to cover all cases.
 
-Include this project on your ZMK's west manifest in config/west.yml:
+Include this project on your ZMK's west manifest in `config/west.yml`:
 
+```yml
 manifest:
   remotes:
     - name: zmkfirmware
@@ -23,15 +25,21 @@ manifest:
       revision: main
   self:
     path: config
-Then, edit your build.yml to look like this, 3.5 is now on main:
+```
 
+Then, edit your `build.yml` to look like this, 3.5 is now on main:
+
+```yml
 on: [workflow_dispatch]
 
 jobs:
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-Now, update your board.overlay adding the necessary bits (update the pins for your board accordingly):
+```
 
+Now, update your `board.overlay` adding the necessary bits (update the pins for your board accordingly):
+
+```dts
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
@@ -80,9 +88,13 @@ Now, update your board.overlay adding the necessary bits (update the pins for yo
 
   };
 };
-Now enable the driver config in your board.config file (read the Kconfig file to find out all possible options):
+```
 
+Now enable the driver config in your `board.config` file (read the Kconfig file to find out all possible options):
+
+```conf
 CONFIG_SPI=y
 CONFIG_INPUT=y
 CONFIG_ZMK_MOUSE=y
 CONFIG_PMW3610=y
+```
